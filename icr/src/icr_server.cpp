@@ -112,15 +112,11 @@ bool IcrServer::setFingerNumber(icr::set_finger_number::Request &req,
   finger_parameters_->clear();
   grasp_update_needed_ = true;
 
-<<<<<<< HEAD
-  ROS_INFO("Hand has now %d fingers",(int)finger_parameters_->size());
-=======
   for(unsigned int i=0; i<req.number; i++) {
     finger_parameters_->push_back(default_finger_params_);
   }
   
   ROS_INFO("Hand has now %d fingers",finger_parameters_->size());
->>>>>>> 344b2ac42be83b52f1d0178d26327b3a43f7cf5c
   res.success=true;
   data_mutex_.unlock();
   return res.success;
@@ -289,15 +285,16 @@ bool IcrServer::computeIcrCore(ICR::VectorXui &centerpoint_ids)
 
 bool IcrServer::loadWfrontObj(icr::load_object::Request  &req, icr::load_object::Response &res) // call from terminal with e.g. following arguments: '{path: /home/rkg/ros/aass_icr/libicr/icrcpp/models/beer_can.obj, name: beer_can}'
 {
-   data_mutex_.lock();
-   obj_loader_->loadObject(req.path,req.name);
-   if((obj_loader_->objectLoaded()) & (obj_loader_->getObject()->getNumCp() > 0))
-     res.success=true;
-   else
-     {
-     ROS_INFO("The loaded target object must be valid. From a terminal type eg. rosservice call /icr_server/load_wfront_obj '{path: /home/username/models/beer_can.obj, name: beer_can}' ");
-     res.success=false;
-     }
+  grasp_update_needed_ = true;
+  data_mutex_.lock();
+  obj_loader_->loadObject(req.path,req.name);
+  if((obj_loader_->objectLoaded()) & (obj_loader_->getObject()->getNumCp() > 0))
+    res.success=true;
+  else
+    {
+      ROS_INFO("The loaded target object must be valid. From a terminal type eg. rosservice call /icr_server/load_wfront_obj '{path: /home/username/models/beer_can.obj, name: beer_can}' ");
+      res.success=false;
+    }
   data_mutex_.unlock();
   return res.success;
 }

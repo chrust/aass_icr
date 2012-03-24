@@ -76,11 +76,11 @@ int main(int argc, char **argv)
 
   // call all servers and get responses
   //
-  if (clientFingerNoSet.call(set_finger_number_srv)) {
-    ROS_INFO("Response: %ld", (long int)set_finger_number_srv.response.success);
-  } else {
-    ROS_ERROR("Failed to call service /icr_server/set_finger_number");
-  }
+ // if (clientFingerNoSet.call(set_finger_number_srv)) {
+  //   ROS_INFO("Response: %ld", (long int)set_finger_number_srv.response.success);
+  // } else {
+  //   ROS_ERROR("Failed to call service /icr_server/set_finger_number");
+  // }
   //
   if (clientLoadObject.call(load_object_srv)) {
     ROS_INFO("Response: %ld", (long int)load_object_srv.response.success);
@@ -88,7 +88,8 @@ int main(int argc, char **argv)
     ROS_ERROR("Failed to call service /icr_server/load_object");
   }
  
-  if (set_finger_number_srv.response.success && load_object_srv.response.success) {
+  //  if (set_finger_number_srv.response.success && load_object_srv.response.success) {
+  if (load_object_srv.response.success) {
     if (clientComputeICR.call(compute_icr_srv)) {
       ROS_INFO("Response: %ld", (long int)compute_icr_srv.response.success);
       ROS_INFO("ICR server responded somehow. Be happy.");
